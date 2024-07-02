@@ -11,11 +11,14 @@ QLearning::QLearning(int num_states, int num_actions, double alpha, double gamma
 
 int QLearning::selectAction(int state) const {
     std::uniform_real_distribution<double> dist(0.0, 1.0);
+    // Exploration vs. Exploitation: epsilon-greedy strategy
     if (dist(generator_) < epsilon_) {
+        // Explore: choose a random action
         std::uniform_int_distribution<int> action_dist(0, num_actions_ - 1);
-        return action_dist(generator_); // Explore
+        return action_dist(generator_);
     }
-    return std::max_element(q_table_[state].begin(), q_table_[state].end()) - q_table_[state].begin(); // Exploit
+    // Exploit: choose the action with the highest Q-value
+    return std::max_element(q_table_[state].begin(), q_table_[state].end()) - q_table_[state].begin();
 }
 
 void QLearning::update(int state, int action, double reward, int next_state) {
